@@ -10,6 +10,7 @@ from skimage.metrics import structural_similarity as ssim
 from tileLoader import load_tiles_from_csv, extract_rgb_patch, extract_gray_patch, extract_histogram
 from collections import defaultdict as DefaultDict
 
+
 RESIZE_DIMS = (50, 50)
 
 def calculate_ssim(image1, image2):
@@ -28,7 +29,7 @@ def calculate_histogram_dist(image1, image2):
     hist2 = np.array(image2.histogram()).astype(np.float32)
     return np.linalg.norm(hist1 - hist2)
 
-def find_best_match(segment, tiles, tree, features, method, top_n=10, usage_counts=None, max_usage=10):
+def find_best_match(segment, tiles, tree, features, method, top_n=10, usage_counts=None): #, max_usage=300
     if method == 'ssim':
         query_feat = extract_rgb_patch(segment, grid_size=5)
     elif method == 'mse':
@@ -45,8 +46,8 @@ def find_best_match(segment, tiles, tree, features, method, top_n=10, usage_coun
     best_index = -1
 
     for i in indices[0]:
-        if usage_counts and usage_counts[i] >= max_usage:
-            continue
+        #if usage_counts and usage_counts[i] >= max_usage:
+           # continue
 
         tile_img = tiles[i]
         if method == 'ssim':
@@ -73,11 +74,11 @@ def find_best_match(segment, tiles, tree, features, method, top_n=10, usage_coun
 
     return best_tile, best_score
 
-def construct_mosaic_from_method(input_tiles, tiles, tree, features, method, max_usage=5):
+def construct_mosaic_from_method(input_tiles, tiles, tree, features, method): #, max_usage=300
     matched_tiles = []
     usage_counts = DefaultDict(int)
     for tile in tqdm(input_tiles, desc=f"Matching tiles ({method.upper()})"):
-        match, _ = find_best_match(tile, tiles, tree, features, method=method, usage_counts=usage_counts, max_usage=max_usage)
+        match, _ = find_best_match(tile, tiles, tree, features, method=method, usage_counts=usage_counts) #, max_usage=max_usage
         if match is None:
             least_used_index = min(range(len(tiles)), key=lambda i: usage_counts[i])
             match = tiles[least_used_index]
@@ -97,7 +98,7 @@ def build_all_mosaics(input_tiles, tile_data, tile_size, rows, cols):
     mosaics = []
     for method in ['ssim', 'mse', 'hist']:
         tiles, tree, features = tile_data[method]
-        matched = construct_mosaic_from_method(input_tiles, tiles, tree, features, method, max_usage=50)
+        matched = construct_mosaic_from_method(input_tiles, tiles, tree, features, method) #, max_usage=300
         mosaic = build_mosaic(matched, tile_size, rows, cols)
         mosaics.append((method, mosaic))
     return mosaics
@@ -113,12 +114,15 @@ def show_all_mosaics(mosaics, tile_size=(50, 50), save_dir="Mosaic_Results"):
         if platform.system() == 'Windows':
             os.system(f'start "" "{filepath}"')
 
-def run_mosaic(tile_directory, user_directory, dataset_option, csv_path):
+def run_mosaic(tile_directory, user_directory, dataset_option, csv_path, output_option):
     try:
         print("Calling load_tiles...")
         tile_data = load_tiles_from_csv(tile_directory, user_directory, dataset_option, csv_path)
-        print("Loaded tiles for SSIM, MSE, and HIST")
 
+        if output_option == 'S':
+            print("Loading tiles for SSIM, MSE, and HIST")
+        else:
+            print("Loading tiles")
         # tile_data is a dictionary that contains
         #   "ssim": (tiles, KDTree(ssim_features), np.array(ssim_features))
         #   "mse":  (tiles, KDTree(mse_features), np.array(mse_features))
