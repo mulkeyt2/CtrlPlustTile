@@ -1,10 +1,10 @@
 import os
 from datetime import datetime
 
-def save_mosaic(output, project_path, input_name="mosaic"):
+def save_mosaic(output, project_path, input_name="final"):
     # Ask the user if they want to save the mosaic
     while True:
-        save_output = input("Do you want to save the mosaic to the Output_Mosaic(s) folder? Type Y or N: ").strip().lower()
+        save_output = input(f"\nDo you want to save the {input_name} mosaic to the Output_Mosaic(s) folder? Type Y or N: ").strip().lower()
         if save_output in ['y', 'n']:
             break
         print("Invalid option. Please type Y or N.")

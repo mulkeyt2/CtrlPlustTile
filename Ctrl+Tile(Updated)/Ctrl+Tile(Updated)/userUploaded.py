@@ -106,8 +106,8 @@ def userUploaded():
 
   # If both folders are empty, prompt the user
   if not newFolder and not oldFolder:
-    print('There are no images in the User_Uploaded folder')
-    print('Upload some into the New_Uploads folder and rerun this section')
+    print('\nThere are no images in the User_Uploaded folder')
+    print('Upload some into the New_Uploads folder and rerun this section\n')
     sys.exit()
 
   # If there are no new uploads, use old uploads (already processed)

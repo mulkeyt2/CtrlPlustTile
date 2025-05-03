@@ -35,14 +35,14 @@ def load_input_image(project_path):
     input_files = [f for f in os.listdir(input_img_path) if f.lower().endswith(('.jpg', '.jpeg', '.png'))]
 
     if not input_files:
-        print("Input_Image folder is empty. Place your image in the folder and rerun")
+        print("Input_Image folder is empty. Place your image in the folder and rerun\n")
         sys.exit()
     elif len(input_files) > 1:
-        print("Multiple images found in Input_Image folder. Ensure only one image is present")
+        print("Multiple images found in Input_Image folder. Ensure only one image is present\n")
         sys.exit()
 
     input_img = Image.open(os.path.join(input_img_path, input_files[0])).convert('RGB')
-    print(f"Input image loaded: {input_files[0]}")
+    print(f"\nInput image loaded: {input_files[0]}")
     return input_img
 
 

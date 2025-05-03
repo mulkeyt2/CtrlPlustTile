@@ -14,24 +14,36 @@ import config
 '''
 Step 0: Pre-process the dataset images
 
-    All 2000 images in the Images_Dataset folder have already been processed by the createCSV.py and squareAndResize.py files
+    All 2000 images in the Images_Dataset folder have already been
+    processed by the createCSV.py and squareAndResize.py files.
 
-    You, as the user, do not need to rerun those files
-
+    You, as the user, do not need to rerun those files.
+    - In fact, if you do rerun createCSV.py, the order of the categories
+      may change, affecting tileLoader.py
 '''
 
-# Please install tqdm, scikit-image, & pandas before running main!
-# To do so, run the following in your terminal
-# 'pip install tqdm; pip install scikit-image; pip install pandas'
+'''
+Please install tqdm, scikit-image, pandas, & cv2 before running main!
+To do so, run the following in your terminal
+    'pip install tqdm; pip install scikit-image; pip install pandas; pip install opencv-python'
 
+Also make sure you're in the innermost Ctrl+Tile(Updated) directory
 
+If you get these errors when running main:
+    - RuntimeError: module compiled against ABI version 0x1000009
+      but this version of numpy is 0x2000000
+    - ImportError: numpy.core.multiarray failed to import
+
+    Try running 'pip install numpy==1.26.4' before rerunning main
+        numpy==1.26.4 should be compatible with opencv-contrib-python==4.5.5.62
+'''
 
 def capture_webcam_frame():
     cap = cv2.VideoCapture(0)
     if not cap.isOpened():
-        raise RuntimeError("Webcam not accessible.")
+        raise RuntimeError("Webcam not accessible. Try again")
 
-    print("Press SPACE to capture a frame...", flush=True)  # Ensure the message is printed immediately
+    print("\nPress SPACE to capture a frame...", flush=True)  # Ensure the message is printed immediately
     cv2.namedWindow('Webcam - Press SPACE to Capture', cv2.WINDOW_NORMAL)
     while True:
         ret, frame = cap.read()
@@ -40,12 +52,12 @@ def capture_webcam_frame():
         cv2.imshow('Webcam - Press SPACE to Capture', frame)
         key = cv2.waitKey(1)
         if key % 256 == 27:  # ESC pressed
-            print("Capture cancelled.")
+            print("\nCapture cancelled.")
             cap.release()
             cv2.destroyAllWindows()
             sys.exit()
         elif key % 256 == 32:
-            print("Image captured.", flush=True)
+            print("\nImage captured.", flush=True)
             img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             cap.release()
             cv2.destroyAllWindows()
@@ -88,12 +100,15 @@ def main():
 
             # Step 6: Display all mosaics
             show_all_mosaics(mosaics, tile_size=tile_size)
+            print("Check out the Mosaic_Results folder to see all results!")
 
-            # Step 7: Save the selected mosaic (e.g., first one)
-            save_mosaic(mosaics[0][1], config.project_path, input_name="final_mosaic")
+            # Step 7: Save the selected mosaic(s)
+            save_mosaic(mosaics[0][1], config.project_path, input_name=f'{mosaics[0][0]}_{dataset_option}')
+            save_mosaic(mosaics[1][1], config.project_path, input_name=f'{mosaics[1][0]}_{dataset_option}')
+            save_mosaic(mosaics[2][1], config.project_path, input_name=f'{mosaics[2][0]}_{dataset_option}')
 
         elif output_option == 'W':
-            print("Webcam mode activated. Preparing to capture an image...", flush=True)
+            print("\nWebcam mode activated. Preparing to capture an image...", flush=True)
             #input_img = capture_webcam_frame().convert('RGB')
 
             # Step 1: Capture a frame from the webcam

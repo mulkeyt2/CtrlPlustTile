@@ -57,7 +57,7 @@ def appendTo(tilePath, tiles,  ssim_features, mse_features, hist_features):
   pass
 
 
-# Main function
+# Main function in file
 def load_tiles_from_csv(tile_directory, user_directory, dataset_option, csv_path):
     tiles = []
     ssim_features, mse_features, hist_features = [], [], []
@@ -70,7 +70,7 @@ def load_tiles_from_csv(tile_directory, user_directory, dataset_option, csv_path
 
         if opt == 'U' and user_directory is not None:
 
-            print(f"loading U tiles from: {csv3_path}")
+            print(f"\nloading U tiles from: {csv3_path}")
             print('                      ' + user_directory)
             with open(csv3_path, 'r') as ufile:
                 reader = csv.reader(ufile)
@@ -81,16 +81,16 @@ def load_tiles_from_csv(tile_directory, user_directory, dataset_option, csv_path
 
         if opt == 'P':
 
-            print(f"loading P tiles from: {csv_path}")
+            print(f"\nloading P tiles from: {csv_path}")
             print('                      ' + tile_directory)
-            for i in range(0, 500):
+            for i in range(1000, 1500):
                 name = datasetCSV.iloc[i, 0]
                 tile_path = os.path.join(tile_directory, name)
                 appendTo(tile_path, tiles, ssim_features, mse_features, hist_features)
 
         if opt == 'A':
 
-            print(f"loading A tiles from: {csv_path}")
+            print(f"\nloading A tiles from: {csv_path}")
             print('                      ' + tile_directory)
             for i in range(1500, 2000):
                 name = datasetCSV.iloc[i, 0]
@@ -99,23 +99,23 @@ def load_tiles_from_csv(tile_directory, user_directory, dataset_option, csv_path
 
         if opt == 'L':
 
-            print(f"loading L tiles from: {csv_path}")
+            print(f"\nloading L tiles from: {csv_path}")
             print('                      ' + tile_directory)
-            for i in range(1000, 1500):
+            for i in range(0, 500):
                 name = datasetCSV.iloc[i, 0]
                 tile_path = os.path.join(tile_directory, name)
                 appendTo(tile_path, tiles, ssim_features, mse_features, hist_features)
 
         if opt == 'M':
 
-            print(f"loading M tiles from: {csv_path}")
+            print(f"\nloading M tiles from: {csv_path}")
             print('                      ' + tile_directory)
             for i in range(500, 1000):
                 name = datasetCSV.iloc[i, 0]
                 tile_path = os.path.join(tile_directory, name)
                 appendTo(tile_path, tiles, ssim_features, mse_features, hist_features)
     
-    print(f"Loaded {len(tiles)} tile images for matching\n")
+    print(f"\nLoaded {len(tiles)} tile images for matching\n")
 
     return {
         "ssim": (tiles, KDTree(ssim_features), np.array(ssim_features)),

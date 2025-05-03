@@ -104,6 +104,7 @@ def build_all_mosaics(input_tiles, tile_data, tile_size, rows, cols):
     return mosaics
 
 def show_all_mosaics(mosaics, tile_size=(50, 50), save_dir="Mosaic_Results"):
+    print('')
     os.makedirs(save_dir, exist_ok=True)
     for method, mosaic in mosaics:
         timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
