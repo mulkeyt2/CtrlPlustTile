@@ -9,7 +9,6 @@ from mosaicCreation import build_all_mosaics, show_all_mosaics, run_mosaic, cons
 from saveOutput import save_mosaic
 from userUploaded import userUploaded
 import config
-import config
 
 '''
 Step 0: Pre-process the dataset images
@@ -28,8 +27,11 @@ To do so, run the following in your terminal
     'pip install tqdm; pip install scikit-image; pip install pandas; pip install opencv-python'
 
 Also make sure you're in the innermost Ctrl+Tile directory
-    'cd 'Ctrl+Tile/Ctrl+Tile' '
-
+If you get this error:
+- An error occurred in main: [Errno 2] No such file or directory:
+  '.../CtrlPlusTile/User_Uploaded/New_Uploads'
+Type 'cd 'Ctrl+Tile/Ctrl+Tile' ' and rerun main
+  
 If you get these errors when running main:
     - RuntimeError: module compiled against ABI version 0x1000009
       but this version of numpy is 0x2000000

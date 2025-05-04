@@ -24,9 +24,9 @@ def calculate_mse(image1, image2):
     arr2 = np.array(image2.resize(RESIZE_DIMS)).astype(np.float32)
     return np.mean((arr1 - arr2) ** 2)
 
-def calculate_histogram_dist(image1, image2):
-    hist1 = np.array(image1.histogram()).astype(np.float32)
-    hist2 = np.array(image2.histogram()).astype(np.float32)
+def calculate_histogram_dist(image1, image2, bins=16):
+    hist1 = extract_histogram(image1, bins)
+    hist2 = extract_histogram(image2, bins)
     return np.linalg.norm(hist1 - hist2)
 
 def find_best_match(segment, tiles, tree, features, method, top_n=10, usage_counts=None): #, max_usage=300
